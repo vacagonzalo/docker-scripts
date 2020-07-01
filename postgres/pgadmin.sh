@@ -15,7 +15,7 @@ printf "nombre del contenedor: $CONTAINER_NAME\n"
 printf "puerto expuesto: $MACHINE_PORT\n"
 printf "correo: $EMAIL\n"
 printf "contraseña: $PASSWORD\n"
-printf "Inportante!, cuando se realize la conexión, utilizar la ip del puerto\n"
+printf "Importante!, cuando se realize la conexión, utilizar la ip del puerto\n"
 printf "del ordenar, caso contrario no se logrará la conexión.\n"
 printf "=====================================================================\n"
 
