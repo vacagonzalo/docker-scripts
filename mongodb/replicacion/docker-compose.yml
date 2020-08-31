@@ -1,0 +1,25 @@
+# Archivo para realizar prácticas de replicación
+# docker-compose up
+version: '3'
+services: 
+    mongodb-1:
+        image: 'mongo'
+        container_name: 'mongodb-1'
+        ports:
+            - 27017:27017
+        volumes: 
+            - ./volumes/mongodb-1:/data/db
+    mongodb-2:
+        image: 'mongo'
+        container_name: 'mongodb-2'
+        ports:
+            - 27018:27017
+        volumes: 
+            - ./volumes/mongodb-2:/data/db
+    mongodb-3:
+        image: 'mongo'
+        container_name: 'mongodb-3'
+        ports:
+            - 27019:27017
+        volumes: 
+            - ./volumes/mongodb-3:/data/db
