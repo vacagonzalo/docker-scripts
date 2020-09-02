@@ -1,24 +1,70 @@
 # Archivo para realizar prácticas de replicación
-# docker-compose up
+# Iniciar la práctica con el comando ´docker-compose up´
+# copiar el archivo 'facts.js' en el volumen de un contenedor (el que va a ser el primario)
+# Abrir 3 terminales utilizando ´docker exec -it mongodb-<n> bash´
+# Dentro de uno de los contenedores (el que va a ser el primario):
+    # Ejecutar el comando ´mongo´
+    # Ejecutar... 
+    #   rs.initiate(
+    #       {
+    #           _id : 'rs0',
+    #           members: [
+    #               { _id : 0, host : "mongodb-1:27017" },
+    #               { _id : 1, host : "mongodb-2:27017" },
+    #               { _id : 2, host : "mongodb-3:27017" }
+    #           ]
+    #       }
+    #   )
+# Ejecutar ´use finanzas´
+# Ingresar en los otros contenedores y ejecutar ´use finanzas´
+# Luego ejecutar rs.slaveOk()
+# Cargar la base de datos en el primary con ´load("/data/db/facts.js")´
+# Por alguna razón cósmica ejecutar load 4 veces
+# Chequear en los tres contenedores ´db.facturas.count()´
+# Desde el primary agregar una factura ´db.facturas.insert({X:1})´ y verificar los secondary
+# Para simular la caida del primario ejecutar en una terminal externa:
+    # ´docker stop mongodb-<n>´ siendo n el número del primario
+# Verificar que uno de los contenedores restantes ha tomado el lugar de primary
+# Agregar una factura con ´db.facturas.insert({X:1})´
+# Reponer el caido con ´docker start mongodb-<n>´
+# Permitir que sea esclavo con rs.slaveOk() (si es que no lo hiciste antes)
+# Chequear que la db esté actualizada con ´db.facturas.count()´
 version: '3'
 services: 
     mongodb-1:
         image: 'mongo'
         container_name: 'mongodb-1'
+        hostname: 'mongodb-1'
+        restart: always
+        entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0"]
+        expose:
+            - 27017
         ports:
             - 27017:27017
         volumes: 
             - ./volumes/mongodb-1:/data/db
+
     mongodb-2:
         image: 'mongo'
         container_name: 'mongodb-2'
+        hostname: 'mongodb-2'
+        restart: always
+        entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0"]
+        expose:
+            - 27017
         ports:
             - 27018:27017
         volumes: 
             - ./volumes/mongodb-2:/data/db
+
     mongodb-3:
         image: 'mongo'
         container_name: 'mongodb-3'
+        hostname: 'mongodb-3'
+        restart: always
+        entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0"]
+        expose:
+            - 27017
         ports:
             - 27019:27017
         volumes: 
